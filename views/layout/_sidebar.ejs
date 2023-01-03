@@ -1,0 +1,46 @@
+<!-- Sidebar Start -->
+<div class="sidebar pe-4 pb-3">
+  <nav class="navbar bg-light navbar-light">
+    <a href="/" class="navbar-brand mx-4 mb-3">
+      <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>GDF V1.0</h3>
+    </a>
+    <div class="d-flex align-items-center ms-4 mb-4">
+      <div class="position-relative">
+        <img class="rounded-circle" src="/img/users/<%= locals.user.image %>" alt="" style="width: 40px; height: 40px;">
+        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+      </div>
+      <div class="ms-3">
+        <h6 class="mb-0"><%= locals.user.first_name %> <%= locals.user.last_name %></h6>
+        <% locals.roles.forEach(function(role) { %>
+        <span class="badge bg-primary"><%= role.name %></span><br>
+        <% }); %>
+      </div>
+    </div>
+    <div class="navbar-nav w-100">
+      <% if(locals.loggedin == true && locals.user && locals.roles.length == 2) { %>
+      <div class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-tasks me-2"></i>Demandes</a>
+        <div class="dropdown-menu bg-transparent border-0">
+          <a href="/manager/home/requests/waiting" class="dropdown-item">Demandes en attentes</a>
+          <a href="/manager/home/requests/accepted" class="dropdown-item">Demandes acceptées</a>
+          <a href="/manager/home/requests/refused" class="dropdown-item">Demandes refusées</a>
+          <a href="/manager/home/requests/history" class="dropdown-item">Historique</a>
+        </div>
+      </div>
+      <a href="/manager/home/users" class="nav-item nav-link"><i class="fas fa-users me-2"></i>Utilisateurs</a>
+      <% } else if(locals.loggedin == true && locals.user && locals.roles.length == 1) { %>
+      <div class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-tasks me-2"></i>Demandes</a>
+        <div class="dropdown-menu bg-transparent border-0">
+          <a href="/requester/home/requests/waiting" class="dropdown-item">Demandes en attentes</a>
+          <a href="/requester/home/requests/accepted" class="dropdown-item">Demandes acceptées</a>
+          <a href="/requester/home/requests/refused" class="dropdown-item">Demandes refusées</a>
+          <a href="/requester/home/requests/history" class="dropdown-item">Historique</a>
+        </div>
+      </div>
+      <% } %>
+
+    </div>
+  </nav>
+</div>
+<!-- Sidebar End -->

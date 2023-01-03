@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<%- include('../layout/_head') %>
+
+<body>
+  <div class="container-xxl position-relative bg-white d-flex p-0">
+    <%- include('../layout/_spinner') %>
+
+    <%- include('../layout/_sidebar') %>
+
+
+    <!-- Content Start -->
+    <div class="content">
+      <%- include('../layout/_navbar') %>
+
+      <!--start dynamic part-->
+      <!-- Table Start -->
+      <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="col-12">
+              <% if(locals.message.successMessage){ %>
+              <div class="alert alert-success" role="alert">
+                <%= locals.message.successMessage %>
+              </div>
+              <% } else if(locals.message.warningMessage) { %>
+              <div class="alert alert-warning" role="alert">
+                <%= locals.message.warningMessage %>
+              </div>
+              <% } else if(locals.message.dangerMessage) {%>
+              <div class="alert alert-danger" role="alert">
+                <%= locals.message.dangerMessage %>
+              </div>
+              <% } %>
+              <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Liste des demandes
+                  <!-- Button trigger modal -->
+                  <button type="button" class="btn btn-success shadow-none" data-bs-toggle="modal" data-bs-target="#addRequest">
+                    Voulez vous nvoyer une demande?
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="addRequest" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Envoyer une demande</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form class="m-0 p-1" method="post" action="/requester/home/requests">
+                            <div class="mb-3">
+                              <label for="motif" class="form-label">Motif(*):</label>
+                              <textarea class="form-control shadow-none" name="reason" id="motif" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                              <label for="transport" class="form-label">Transport(*):</label>
+                              <input type="text" class="form-control shadow-none" name="transport" id="transport">
+                            </div>
+                            <div class="mb-3">
+                              <label for="destV" class="form-label">Ville de destination(*):</label>
+                              <input type="text" class="form-control shadow-none" name="destination_city" id="destV">
+                            </div>
+                            <div class="mb-3">
+                              <label for="start_date" class="form-label">Date de debut(*):</label>
+                              <input type="date" name="start_date" class="form-control shadow-none" id="start_date">
+                            </div>
+                            <div class="mb-3">
+                              <label for="end_date" class="form-label">Date de fin(*):</label>
+                              <input type="date" name="end_date" class="form-control shadow-none" id="end_date">
+                            </div>
+                            <div class="mb-3">
+                              <label for="total_fees" class="form-label">Totale de frais(*):</label>
+                              <input type="number" step="any" name="total_fees" class="form-control shadow-none" id="total_fees">
+                            </div>
+                            <button type="submit" class="btn btn-primary shadow-none">Envoyer</button>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary shadow-none" data-bs-dismiss="modal">Fermer</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </h6>
+                <form class="d-none d-md-flex m-0" method="post" action="/requester/home/requests/search">
+                  <input type="hidden" name="type" value="<%= status %>">
+                  <input class="form-control border-0" type="search" name="q" placeholder="chercher une demande par son numero">
+                </form>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Motif</th>
+                        <th scope="col">Transport</th>
+                        <th scope="col">Date debut</th>
+                        <th scope="col">Date fin</th>
+                        <th scope="col">Ville de destination</th>
+                        <th scope="col">Total des frais (DH)</th>
+                        <th scope="col">Date de création</th>
+                        <% if(status == "ACCEPTED" || status == "REFUSED") { %>
+                        <th scope="col">Historiser</th>
+                        <% } %>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if(requests.length > 0) { %>
+                      <% requests.forEach( function (request) { %>
+                      <tr>
+                        <th scope="row"><%= request.id %></th>
+                        <td><%= request.reason %></td>
+                        <td><%= request.transport %></td>
+                        <td><%= request.start_date %></td>
+                        <td><%= request.end_date %></td>
+                        <td><%= request.destination_city %></td>
+                        <td><%= request.total_fees %></td>
+                        <td><%= moment(request.createdAt).format('LLL') %></td>
+                        <% if(request.status == "ACCEPTED" || request.status == "REFUSED") { %>
+                        <td><a href="/requester/home/requests/<%= request.id %>/to/history"><button type="button" class="btn btn-success">Historiser</button></a>
+                          <% } %>
+                      </tr>
+                      <% }); %>
+                      <% } else { %>
+                      <div class="alert alert-warning" role="alert">
+                        Pas de demande disponible pour le moment!
+                      </div>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Table End -->
+        <!--end dynamic part-->
+
+        <%- include('../layout/_footer') %>
+      </div>
+      <!-- Content End -->
+    </div>
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+  </div>
+
+  <%- include('../layout/_scripts') %>
+
+</body>
+
+</html>

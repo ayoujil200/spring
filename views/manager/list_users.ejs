@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<%- include('../layout/_head') %>
+
+<body>
+  <div class="container-xxl position-relative bg-white d-flex p-0">
+    <%- include('../layout/_spinner') %>
+
+    <%- include('../layout/_sidebar') %>
+
+
+    <!-- Content Start -->
+    <div class="content">
+      <%- include('../layout/_navbar') %>
+
+      <!--start dynamic part-->
+      <!-- Table Start -->
+      <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="col-12">
+              <% if(locals.message.successMessage){ %>
+              <div class="alert alert-success" role="alert">
+                <%= locals.message.successMessage %>
+              </div>
+              <% } else if(locals.message.warningMessage) { %>
+              <div class="alert alert-warning" role="alert">
+                <%= locals.message.warningMessage %>
+              </div>
+              <% } else if(locals.message.dangerMessage) {%>
+              <div class="alert alert-danger" role="alert">
+                <%= locals.message.dangerMessage %>
+              </div>
+              <% } %>
+              <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Liste d'utilisateurs:</h6>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prenom</th>
+                        <th scope="col">Nom d'utilisateur</th>
+                        <th scope="col">L'adresse mail</th>
+                        <th scope="col">Roles</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if(users){ %>
+                      <% users.forEach( function (user) { %>
+                      <tr>
+                        <th scope="row"><%= user.id %></th>
+                        <td><%= user.first_name %></td>
+                        <td><%= user.last_name %></td>
+                        <td><%= user.username %></td>
+                        <td><%= user.email %></td>
+                        <td>
+                          <% user.roles.forEach( function (role) { %>
+                          <span class="badge bg-info text-dark">
+                            <%= role.name %>
+                          </span>
+                          <% }); %>
+                        </td>
+                        <td>
+                          <% if(user.status == "ENABLED") { %>
+                          <a href="/manager/home/users/<%= user.id %>/to/disable"><button type="button" class="btn btn-warning">Bloquer</button></a>
+                          <% } else if(user.status == "DISABLED") { %>
+                          <a href="/manager/home/users/<%= user.id %>/to/enable"><button type="button" class="btn btn-success">Débloquer</button></a>
+                          <% } %>
+                        </td>
+                      </tr>
+                      <% }); %>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Table End -->
+        <!--end dynamic part-->
+
+        <%- include('../layout/_footer') %>
+      </div>
+      <!-- Content End -->
+    </div>
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+  </div>
+
+  <%- include('../layout/_scripts') %>
+
+</body>
+
+</html>

@@ -1,0 +1,115 @@
+<!-- Navbar Start -->
+<nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+  <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+  </a>
+  <a href="#" class="sidebar-toggler flex-shrink-0">
+    <i class="fa fa-bars"></i>
+  </a>
+  <div class="navbar-nav align-items-center ms-auto">
+    <div class="nav-item dropdown">
+      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+        <i class="fa fa-bell me-lg-2"></i>
+        <span class="d-none d-lg-inline-flex">Notifications</span>
+      </a>
+      <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0 container-fluid" id="nots">
+
+      </div>
+    </div>
+    <div class="nav-item dropdown">
+      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+        <img class="rounded-circle me-lg-2" src="/img/users/<%= locals.user.image %>" alt="" style="width: 40px; height: 40px;">
+        <span class="d-none d-lg-inline-flex"><%= locals.user.first_name %> <%= locals.user.last_name %></span>
+      </a>
+      <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+        <% if(locals.loggedin == true && locals.user && locals.roles.length == 2) { %>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-success shadow-none dropdown-item" data-bs-toggle="modal" data-bs-target="#logout">
+          Profile
+        </button>
+        <% } else if(locals.loggedin == true && locals.user && locals.roles.length == 1) { %>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-success shadow-none dropdown-item" data-bs-toggle="modal" data-bs-target="#logout">
+          Profile
+        </button>
+        <% } %>
+        <form method="post" action="/logout"><input type="submit" class="dropdown-item" value="Déconnecté"></form>
+      </div>
+    </div>
+  </div>
+</nav>
+<% if(locals.loggedin == true && locals.user && locals.roles.length == 2) { %>
+<!-- Modal -->
+<div class="modal fade" id="logout" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modifier votre profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="m-0 p-1" method="post" action="/manager/home/profile" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="nom" class="form-label">Nom(*):</label>
+            <input type="text" class="form-control shadow-none" name="first_name" id="nom" value="<%= locals.user.first_name%>">
+          </div>
+          <div class="mb-3">
+            <label for="prenom" class="form-label">Prenom(*):</label>
+            <input type="text" class="form-control shadow-none" name="last_name" id="prenom" value="<%= locals.user.last_name%>">
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Mot de passe(*):</label>
+            <input type="text" class="form-control shadow-none" name="password" id="password">
+          </div>
+          <div class="mb-3">
+            <label for="image" class="form-label">Image de profile</label>
+            <input class="form-control" name="image" type="file" id="image">
+          </div>
+          <button type="submit" class="btn btn-primary shadow-none">Modifier</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary shadow-none" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Navbar End -->
+<% } else if(locals.loggedin == true && locals.user && locals.roles.length == 1) { %>
+<!-- Modal -->
+<div class="modal fade" id="logout" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modifier votre profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="m-0 p-1" method="post" action="/requester/home/profile" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="nom" class="form-label">Nom(*):</label>
+            <input type="text" class="form-control shadow-none" name="first_name" id="nom" value="<%= locals.user.first_name %>">
+          </div>
+          <div class="mb-3">
+            <label for="prenom" class="form-label">Prenom(*):</label>
+            <input type="text" class="form-control shadow-none" name="last_name" id="prenom" value="<%= locals.user.last_name %>">
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Mot de passe(*):</label>
+            <input type="text" class="form-control shadow-none" name="password" id="password">
+          </div>
+          <div class="mb-3">
+            <label for="image" class="form-label">Image de profile</label>
+            <input class="form-control" name="image" type="file" id="image">
+          </div>
+          <button type="submit" class="btn btn-primary shadow-none">Modifier</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary shadow-none" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Navbar End -->
+<% } %>
